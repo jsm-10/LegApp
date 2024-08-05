@@ -5,63 +5,37 @@ import JSM.LegalApp.LegApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+
+import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public String listUsers(Model model) {
-        model.addAttribute("users", userService.findAll());
-        return "userList";
-    }
-
     @GetMapping("/register")
-    public String showRegistrationForm() {
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
         return "register";
     }
 
-    @PostMapping("/register")
-    public String registerUser(User user) {
-        userService.save(user);
-        return "redirect:/users";
-    }
-    
-    @GetMapping("/edit/{id}")
-    public String showUpdateForm(@PathVariable("id") Long id, Model model) {
-        User user = userService.findById(id);
-        if (user != null) {
-            model.addAttribute("user", user);
-            return "updateUser";
-        } else {
-            return "redirect:/users";
+    @PostMapping("/users/register")
+    public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "register";
         }
-    }
 
-    @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") Long id, User updatedUser) {
-        User user = userService.findById(id);
-        if (user != null) {
-            user.setUsername(updatedUser.getUsername());
-            user.setPassword(updatedUser.getPassword());
-            user.setRole(updatedUser.getRole());
-            userService.save(user);
-            return "redirect:/users";
-        } else {
-            return "redirect:/users";
+        if (userService.existsByUsername(user.getUsername())) {
+            result.rejectValue("username", null, "There is already an account registered with that username");
+            return "register";
         }
-    }
 
-    @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
-        userService.deleteById(id);
-        return "redirect:/users";
+        userService.registerUser(user);
+        return "redirect:/login";
     }
 }
