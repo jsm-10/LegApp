@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <title>Home</title>
+    <title>LegalApp - Inicio</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
 </head>
 <body>
-    <h1>Welcome to LegalApp</h1>
-    <a href="/register">Register</a>
+    <header>
+        <h1>Bienvenido a LegalApp</h1>
+        <nav>
+            <ul>
+                <li><a href="/login">Iniciar Sesión</a></li>
+                <li><a href="/register">Registrarse</a></li>
+                <li><a href="/chat">Chat en Vivo</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Sobre Nosotros</h2>
+            <p>LegalApp es una plataforma donde puedes recibir asesoramiento legal en tiempo real.</p>
+        </section>
+        <section>
+            <h2>Servicios</h2>
+            <ul>
+                <li>Asesoramiento Legal</li>
+                <li>Gestión de Trámites</li>
+                <li>Consultas en Línea</li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 LegalApp. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>

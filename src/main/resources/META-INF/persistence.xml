@@ -4,6 +4,8 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>JSM.LegalApp.LegApp.model.User</class>
     <class>JSM.LegalApp.LegApp.model.Membership</class>
+    <class>JSM.LegalApp.LegApp.model.ChatMessage</class>
+    <class>JSM.LegalApp.LegApp.model.LegalRequest</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/legappdb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

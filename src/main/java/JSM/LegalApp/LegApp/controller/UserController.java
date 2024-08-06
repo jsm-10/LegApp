@@ -30,7 +30,7 @@ public class UserController {
             return "register";
         }
 
-        if (userService.existsByUsername(user.getUsername())) {
+        if (userService.existsByUsername(user.getUsername())) { // Cambia `existByUsername` a `existsByUsername`
             result.rejectValue("username", null, "There is already an account registered with that username");
             return "register";
         }

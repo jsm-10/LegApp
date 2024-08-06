@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat en Vivo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+        var stompClient = null;
+
+        function connect() {
+            var socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/public', function (messageOutput) {
+                    showMessage(JSON.parse(messageOutput.body));
+                });
+            });
+        }
+
+        function sendMessage() {
+            var messageContent = document.getElementById("messageInput").value;
+            if (messageContent && stompClient) {
+                var chatMessage = {
+                    sender: "user", // Cambia esto según el remitente real
+                    content: messageContent
+                };
+                stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+            }
+        }
+
+        function showMessage(message) {
+            var messageElement = document.createElement('div');
+            messageElement.appendChild(document.createTextNode(message.sender + ": " + message.content));
+            document.getElementById("messages").appendChild(messageElement);
+        }
+
+        window.onload = function() {
+            connect();
+        };
+    </script>
+</head>
+<body>
+    <div id="chat">
+        <div id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Escribe un mensaje..."/>
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
+</body>
+</html>
